@@ -1,14 +1,10 @@
-<div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
-  <h1>{{ title }}</h1>
-  
-  <div *ngIf="userInfo?.clientPrincipal" style="margin: 20px 0; padding: 20px; background: #e8f5e9; border-radius: 8px;">
-    <h3>Welcome, {{ userInfo.clientPrincipal.userDetails }}!</h3>
-    <p>Provider: {{ userInfo.clientPrincipal.identityProvider }}</p>
-    <button (click)="logout()" style="margin-top: 10px; padding: 10px 20px; cursor: pointer;">Logout</button>
-  </div>
-  
-  <p *ngIf="message" style="margin-top: 20px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
-    API Response: <strong>{{ message }}</strong>
-  </p>
-  <p *ngIf="!message">Loading message from API...</p>
+<div class="app-container" *ngIf="!(isLoading$ | async); else loading">
+  <router-outlet></router-outlet>
 </div>
+
+<ng-template #loading>
+  <div class="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
+</ng-template>

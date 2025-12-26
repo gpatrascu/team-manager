@@ -1,0 +1,56 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Team Manager Dashboard</h1>
+      <div class="user-menu">
+        <div class="user-info" *ngIf="userName">
+          <span class="user-greeting">Welcome, {{ userName }}</span>
+          <span class="user-email" *ngIf="userEmail">{{ userEmail }}</span>
+        </div>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <div class="welcome-card">
+      <h2>You're successfully authenticated!</h2>
+      <p>You're now logged in via Facebook authentication.</p>
+
+      <div class="user-details" *ngIf="user$ | async as user">
+        <h3>Your Profile Information:</h3>
+        <ul>
+          <li><strong>Identity Provider:</strong> {{ user.identityProvider }}</li>
+          <li><strong>User ID:</strong> {{ user.userId }}</li>
+          <li><strong>User Details:</strong> {{ user.userDetails }}</li>
+        </ul>
+
+        <h3>Claims:</h3>
+        <ul>
+          <li *ngFor="let claim of user.claims">
+            <strong>{{ claim.typ }}:</strong> {{ claim.val }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>Teams</h3>
+        <p>Manage and organize your teams</p>
+      </div>
+      <div class="feature-card">
+        <h3>Projects</h3>
+        <p>Track and monitor projects</p>
+      </div>
+      <div class="feature-card">
+        <h3>Members</h3>
+        <p>Manage team members and roles</p>
+      </div>
+      <div class="feature-card">
+        <h3>Analytics</h3>
+        <p>View team performance metrics</p>
+      </div>
+    </div>
+  </main>
+</div>

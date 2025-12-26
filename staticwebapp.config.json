@@ -1,4 +1,14 @@
 {
+  "auth": {
+    "identityProviders": {
+      "facebook": {
+        "registration": {
+          "appIdSettingName": "FACEBOOK_APP_ID",
+          "appSecretSettingName": "FACEBOOK_APP_SECRET"
+        }
+      }
+    }
+  },
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": ["/api/*", "/*.{css,scss,js,png,gif,ico,jpg,svg}", "/data-deletion.html", "/privacy-policy.html"]
@@ -9,7 +19,19 @@
       "allowedRoles": ["anonymous"]
     },
     {
+      "route": "/dashboard/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/protected/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
       "route": "/api/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/login",
       "allowedRoles": ["anonymous"]
     }
   ],

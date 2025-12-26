@@ -1,30 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   title = 'Team Manager';
-  message = '';
-  userInfo: any = null;
+  isLoading$ = this.authService.isLoading$;
 
-  constructor(private http: HttpClient) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.http.get('/api/GetMessage', { responseType: 'text' })
-      .subscribe(data => this.message = data);
-    
-    this.http.get('/.auth/me')
-      .subscribe(data => this.userInfo = data);
-  }
-
-  logout() {
-    window.location.href = '/.auth/logout';
+    // AuthService handles initialization automatically
+    // User info is loaded in AuthService constructor
   }
 }
