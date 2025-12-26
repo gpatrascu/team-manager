@@ -27,7 +27,7 @@ export interface UserInfo {
 })
 export class AuthService {
   private readonly AUTH_ME_ENDPOINT = '/.auth/me';
-  private readonly LOGIN_ENDPOINT = '/.auth/login/facebook';
+  private readonly LOGIN_ENDPOINT = '/.auth/login/google';
   private readonly LOGOUT_ENDPOINT = '/.auth/logout';
 
   private userSubject = new BehaviorSubject<UserInfo | null>(null);
@@ -113,8 +113,8 @@ export class AuthService {
   }
 
   /**
-   * Initiate Facebook login flow
-   * This redirects to Azure SWA's built-in Facebook authentication endpoint
+   * Initiate Google login flow
+   * This redirects to Azure SWA's built-in Google authentication endpoint
    */
   public login(): void {
     // Append post-login redirect URL

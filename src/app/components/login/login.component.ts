@@ -28,9 +28,9 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Initiate Facebook login process
+   * Initiate Google login process
    */
-  loginWithFacebook(): void {
+  loginWithGoogle(): void {
     this.isLoading = true;
     this.authService.login();
   }
