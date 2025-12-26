@@ -12,9 +12,11 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'Team Manager';
-  isLoading$ = this.authService.isLoading$;
+  isLoading$;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.isLoading$ = this.authService.isLoading$;
+  }
 
   ngOnInit() {
     // AuthService handles initialization automatically
