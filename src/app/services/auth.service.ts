@@ -118,7 +118,8 @@ export class AuthService {
    */
   public login(): void {
     // Append post-login redirect URL
-    const redirectUrl = this.LOGIN_ENDPOINT + '?post_login_redirect_uri=' + encodeURIComponent(window.location.origin + '/dashboard');
+    // Redirect to root (/) so Angular can initialize and handle routing to /dashboard
+    const redirectUrl = this.LOGIN_ENDPOINT + '?post_login_redirect_uri=' + encodeURIComponent(window.location.origin + '/');
     window.location.href = redirectUrl;
   }
 
