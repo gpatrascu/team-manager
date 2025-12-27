@@ -25,7 +25,11 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "staticwebapp.config.json"
+              {
+                "glob": "staticwebapp.config.json",
+                "input": ".",
+                "output": "/"
+              }
             ],
             "styles": [
               "src/styles.css"
