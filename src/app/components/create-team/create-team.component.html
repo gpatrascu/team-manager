@@ -1,0 +1,88 @@
+<div class="create-team-container">
+  <div class="back-link">
+    <a (click)="onCancel()" class="link">← Back to Teams</a>
+  </div>
+
+  <div class="form-container">
+    <h1>Create New Team</h1>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="createTeamForm" (ngSubmit)="onSubmit()">
+      <!-- Team Name Field -->
+      <div class="form-group">
+        <label for="name">Team Name *</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Development Team"
+          class="form-input"
+          [class.invalid]="nameControl?.invalid && nameControl?.touched"
+        />
+        <div
+          *ngIf="nameControl?.invalid && nameControl?.touched"
+          class="error-text"
+        >
+          <span *ngIf="nameControl?.hasError('required')">
+            Team name is required
+          </span>
+          <span *ngIf="nameControl?.hasError('minlength')">
+            Team name must be at least 3 characters
+          </span>
+          <span *ngIf="nameControl?.hasError('maxlength')">
+            Team name cannot exceed 100 characters
+          </span>
+        </div>
+      </div>
+
+      <!-- Description Field -->
+      <div class="form-group">
+        <label for="description">Description (optional)</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          placeholder="Main development team for backend services..."
+          rows="4"
+          class="form-textarea"
+          [class.invalid]="
+            descriptionControl?.invalid && descriptionControl?.touched
+          "
+        ></textarea>
+        <div
+          *ngIf="descriptionControl?.invalid && descriptionControl?.touched"
+          class="error-text"
+        >
+          <span *ngIf="descriptionControl?.hasError('maxlength')">
+            Description cannot exceed 500 characters
+          </span>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="btn-secondary"
+          [disabled]="isSubmitting"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="isSubmitting || createTeamForm.invalid"
+        >
+          {{ isSubmitting ? 'Creating...' : 'Create Team' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="info-message">
+      ℹ️ You will be automatically set as the admin of this team
+    </div>
+  </div>
+</div>

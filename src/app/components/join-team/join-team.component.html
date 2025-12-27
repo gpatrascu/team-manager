@@ -1,0 +1,93 @@
+<div class="join-team-container">
+  <h1>Join Team</h1>
+
+  <!-- Validating Token -->
+  <div *ngIf="isValidating" class="loading">
+    <p>Validating invite link...</p>
+  </div>
+
+  <!-- Invalid Token -->
+  <div *ngIf="!isValidating && !isTokenValid" class="error-container">
+    <div class="error-icon">⚠️</div>
+    <h2>Invalid or Expired Invite Link</h2>
+    <p>
+      This invite link is no longer valid. Please ask a team admin for a new
+      invite.
+    </p>
+    <button (click)="onCancel()" class="btn-secondary">
+      ← Back to Teams
+    </button>
+  </div>
+
+  <!-- Valid Token - Show Form -->
+  <div *ngIf="!isValidating && isTokenValid" class="form-container">
+    <div class="invite-info">
+      <div class="team-icon">🏢</div>
+      <div class="info-text">
+        <p class="info-message">You've been invited to join a team</p>
+        <p class="info-note">
+          Your membership will need admin approval before you can access all
+          team features
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="joinForm" (ngSubmit)="onSubmit()">
+      <!-- Nickname Field -->
+      <div class="form-group">
+        <label for="nickname">Choose your nickname *</label>
+        <input
+          id="nickname"
+          type="text"
+          formControlName="nickname"
+          placeholder="Johnny"
+          class="form-input"
+          [class.invalid]="nicknameControl?.invalid && nicknameControl?.touched"
+        />
+        <p class="input-hint">This will be your display name in the team</p>
+        <div
+          *ngIf="nicknameControl?.invalid && nicknameControl?.touched"
+          class="error-text"
+        >
+          <span *ngIf="nicknameControl?.hasError('required')">
+            Nickname is required
+          </span>
+          <span *ngIf="nicknameControl?.hasError('minlength')">
+            Nickname must be at least 2 characters
+          </span>
+          <span *ngIf="nicknameControl?.hasError('maxlength')">
+            Nickname cannot exceed 50 characters
+          </span>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="btn-secondary"
+          [disabled]="isSubmitting"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="isSubmitting || joinForm.invalid"
+        >
+          {{ isSubmitting ? 'Joining...' : 'Join Team' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="info-message-bottom">
+      ℹ️ Your membership will need admin approval before you can access all team
+      features
+    </div>
+  </div>
+</div>

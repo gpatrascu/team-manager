@@ -1,0 +1,175 @@
+<div class="team-detail-container">
+  <!-- Back Link -->
+  <div class="back-link">
+    <a (click)="goBack()" class="link">← Back to Teams</a>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading team details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+    <button (click)="goBack()" class="btn-secondary">Go Back</button>
+  </div>
+
+  <!-- Team Content -->
+  <div *ngIf="!isLoading && !error && team" class="content">
+    <!-- Team Header -->
+    <div class="team-header">
+      <div class="team-title">
+        <h1>🏢 {{ team.name }}</h1>
+        <span *ngIf="isAdmin" class="badge admin-badge">👑 Admin</span>
+        <span *ngIf="isActiveMember && !isAdmin" class="badge member-badge">
+          👥 Member
+        </span>
+        <span *ngIf="isPendingMember" class="badge pending-badge">
+          ⏳ Pending
+        </span>
+      </div>
+
+      <p *ngIf="team.description" class="team-description">
+        {{ team.description }}
+      </p>
+
+      <p class="team-meta">
+        Created {{ getRelativeTime(team.createdAt) }} · Last updated
+        {{ getRelativeTime(team.updatedAt) }}
+      </p>
+    </div>
+
+    <!-- Pending Member View -->
+    <div *ngIf="isPendingMember" class="pending-view">
+      <div class="info-box">
+        <h3>⏳ Your membership is pending approval</h3>
+        <p>
+          An admin will review your request soon. You'll get full access to the
+          team once approved.
+        </p>
+      </div>
+
+      <div class="admin-list">
+        <h4>Team Admins:</h4>
+        <ul>
+          <li *ngFor="let adminId of team.admins">{{ adminId }}</li>
+        </ul>
+      </div>
+
+      <p class="limited-access">
+        [Limited view - full details available after approval]
+      </p>
+    </div>
+
+    <!-- Full Access View (Admin or Active Member) -->
+    <div *ngIf="!isPendingMember">
+      <!-- Invite Section (Admin Only) -->
+      <div *ngIf="isAdmin" class="invite-section">
+        <h2>📧 Invite Members</h2>
+
+        <button
+          *ngIf="!inviteToken"
+          (click)="generateInviteToken()"
+          [disabled]="isGeneratingToken"
+          class="btn-primary"
+        >
+          {{ isGeneratingToken ? 'Generating...' : 'Generate Invite Link' }}
+        </button>
+
+        <div *ngIf="inviteToken" class="invite-token-box">
+          <p class="invite-label">Invite link:</p>
+          <div class="invite-link-container">
+            <input
+              type="text"
+              readonly
+              [value]="
+                window.location.origin + '/join/' + inviteToken
+              "
+              class="invite-input"
+            />
+            <button (click)="copyInviteLink()" class="btn-copy">
+              {{ tokenCopied ? '✓ Copied' : '📋 Copy' }}
+            </button>
+          </div>
+          <p
+            class="token-expiry"
+            [class.expired]="isTokenExpired()"
+          >
+            {{ getTokenExpiryText() }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Pending Approvals (Admin Only) -->
+      <div *ngIf="isAdmin && pendingMembers.length > 0" class="pending-section">
+        <h2>⏳ Pending Approvals ({{ pendingMembers.length }})</h2>
+
+        <div class="member-list">
+          <div
+            *ngFor="let member of pendingMembers"
+            class="member-card pending"
+          >
+            <div class="member-info">
+              <div class="member-icon">👤</div>
+              <div>
+                <h4>{{ member.name }} ({{ member.email }})</h4>
+                <p class="member-meta">
+                  Nickname: {{ member.nickname }} · Joined
+                  {{ getRelativeTime(member.joinedAt) }}
+                </p>
+              </div>
+            </div>
+            <div class="member-actions">
+              <button
+                (click)="approveMember(member.id)"
+                [disabled]="processingMemberId === member.id"
+                class="btn-approve"
+              >
+                ✓ Approve
+              </button>
+              <button
+                (click)="rejectMember(member.id)"
+                [disabled]="processingMemberId === member.id"
+                class="btn-reject"
+              >
+                ✗ Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Members -->
+      <div class="members-section">
+        <h2>✓ Active Members ({{ activeMembers.length }})</h2>
+
+        <div *ngIf="activeMembers.length === 0" class="empty-state">
+          <p>No active members yet.</p>
+        </div>
+
+        <div class="member-list">
+          <div *ngFor="let member of activeMembers" class="member-card">
+            <div class="member-info">
+              <div class="member-icon">👤</div>
+              <div>
+                <h4>
+                  {{ member.name }} ({{ member.email }})
+                  <span *ngIf="team!.admins.includes(member.userId!)" class="admin-crown">
+                    · 👑 Admin
+                  </span>
+                </h4>
+                <p class="member-meta">
+                  <span *ngIf="member.nickname">
+                    Nickname: {{ member.nickname }} ·
+                  </span>
+                  Joined {{ getRelativeTime(member.joinedAt) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

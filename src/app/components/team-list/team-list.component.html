@@ -1,0 +1,107 @@
+<div class="team-list-container">
+  <div class="header">
+    <h1>My Teams</h1>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading teams...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+    <button (click)="loadTeams()" class="btn-retry">Retry</button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && !error" class="content">
+    <!-- Create Team Button -->
+    <div class="create-team-section">
+      <button (click)="navigateToCreateTeam()" class="btn-create">
+        + Create New Team
+      </button>
+    </div>
+
+    <!-- Owned Teams Section -->
+    <section class="teams-section">
+      <h2 class="section-title">📁 My Teams (Admin)</h2>
+
+      <div *ngIf="ownedTeams.length === 0" class="empty-state">
+        <p>You haven't created any teams yet.</p>
+      </div>
+
+      <div class="team-cards">
+        <div
+          *ngFor="let team of ownedTeams"
+          class="team-card"
+          (click)="navigateToTeam(team.id)"
+        >
+          <div class="team-card-header">
+            <div class="team-icon">🏢</div>
+            <div class="team-info">
+              <h3>{{ team.name }}</h3>
+              <p class="team-meta">
+                {{ getActiveMemberCount(team) }} member{{
+                  getActiveMemberCount(team) !== 1 ? 's' : ''
+                }}
+                · Created {{ getRelativeTime(team.createdAt) }}
+              </p>
+            </div>
+            <div class="team-arrow">→</div>
+          </div>
+          <p *ngIf="team.description" class="team-description">
+            {{ team.description }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Joined Teams Section -->
+    <section class="teams-section">
+      <h2 class="section-title">👥 Joined Teams</h2>
+
+      <div *ngIf="joinedTeams.length === 0" class="empty-state">
+        <p>You haven't joined any teams yet.</p>
+      </div>
+
+      <div class="team-cards">
+        <div
+          *ngFor="let team of joinedTeams"
+          class="team-card"
+          (click)="navigateToTeam(team.id)"
+        >
+          <div class="team-card-header">
+            <div class="team-icon">🏢</div>
+            <div class="team-info">
+              <h3>{{ team.name }}</h3>
+              <p class="team-meta">
+                {{ getActiveMemberCount(team) }} member{{
+                  getActiveMemberCount(team) !== 1 ? 's' : ''
+                }}
+                · Joined {{ getRelativeTime(team.createdAt) }}
+              </p>
+            </div>
+            <div class="team-arrow">→</div>
+          </div>
+          <p *ngIf="team.description" class="team-description">
+            {{ team.description }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty State (No Teams at all) -->
+    <div
+      *ngIf="ownedTeams.length === 0 && joinedTeams.length === 0"
+      class="no-teams-state"
+    >
+      <div class="no-teams-icon">📋</div>
+      <h3>You're not part of any teams yet</h3>
+      <p>Create your first team or wait for an invite</p>
+      <button (click)="navigateToCreateTeam()" class="btn-primary">
+        + Create your first team
+      </button>
+    </div>
+  </div>
+</div>

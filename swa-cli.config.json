@@ -1,0 +1,14 @@
+{
+  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+  "configurations": {
+    "team-manager": {
+      "appLocation": ".",
+      "apiLocation": "api",
+      "outputLocation": "dist/team-manager/browser",
+      "appBuildCommand": "npm run build",
+      "apiBuildCommand": "cd api && dotnet build",
+      "run": "npm run start:app",
+      "appDevserverUrl": "http://localhost:4200"
+    }
+  }
+}
